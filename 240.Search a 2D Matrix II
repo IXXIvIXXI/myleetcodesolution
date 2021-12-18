@@ -1,0 +1,46 @@
+class Solution {
+    public boolean searchMatrix(int[][] matrix, int target) {
+    /* my solution
+        int m = matrix.length;
+        int n = matrix[0].length;
+        if (matrix == null || matrix.length == 0 || matrix[0].length == 0) {
+            return false;
+        }
+        int newCols = n;
+        for (int i = n - 1; i >= 0; i--) {
+            if (matrix[0][i] > target) {
+                newCols = newCols - 1;
+            }
+        }
+        if (newCols == 0) {
+            return false;
+        }
+        for (int i = 0; i < m; i++) {
+            if (matrix[i][newCols - 1] >= target) {
+                for (int j = 0; j < newCols; j++) {
+                    if (matrix[i][j] == target) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+    */
+        if (matrix == null || matrix.length == 0 || matrix[0].length == 0) {
+            return false;
+        }
+        int row = 0;
+        int col = matrix[0].length - 1;
+        while(row < matrix.length && col >= 0) {
+            if (matrix[row][col] == target) {
+                return true;
+            } else if (matrix[row][col] > target) {
+                col--;
+            } else {
+                row++;
+            }
+        }
+        return false;
+    }
+}
