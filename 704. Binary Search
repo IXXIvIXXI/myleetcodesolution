@@ -1,0 +1,42 @@
+class Solution {
+    /*
+    public int search(int[] nums, int target) {
+        return searchHelper(nums, target, 0, nums.length - 1);
+    }
+    
+    public int searchHelper (int[] nums, int target, int lo, int hi) {
+        if (lo == hi) {
+            if (nums[lo] != target) {
+                return -1;
+            } else {
+                return lo;
+            }
+        }
+        int mid = lo + (hi - lo) / 2;
+        if (nums[mid] == target) {
+            return mid;
+        }
+        int left = searchHelper (nums, target, lo, mid);
+        int right = searchHelper (nums, target, mid + 1, hi);
+        return Math.max(left, right);
+    }
+    */
+    public int search(int[] nums, int target) {
+        int mid;
+        int lo = 0;
+        int hi = nums.length - 1;
+        
+        while (lo <= hi) {
+            mid = lo + (hi - lo) / 2;
+            if (nums[mid] == target) {
+                return mid;
+            }
+            if (target > nums[mid]) {
+                lo = mid + 1;
+            } else {
+                hi = mid - 1;
+            }
+        }
+        return -1;
+    }
+}
