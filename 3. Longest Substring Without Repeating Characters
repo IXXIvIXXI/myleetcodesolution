@@ -1,0 +1,23 @@
+// sliding window problem
+class Solution {
+    public int lengthOfLongestSubstring(String s) {
+        int pointer1 = 0;
+        int pointer2 = 0;
+        int maxLength = 0;
+        HashSet<Character> charSet = new HashSet();
+        
+        while (pointer2 < s.length()) {
+            char currTail = s.charAt(pointer2);
+            char currHead = s.charAt(pointer1);
+            if (!charSet.contains(currTail)) {
+                charSet.add(currTail);
+                pointer2++;
+                maxLength = Math.max(charSet.size(), maxLength);
+            } else {
+                charSet.remove(currHead);
+                pointer1++;
+            }
+        }
+        return maxLength;
+    }
+}
