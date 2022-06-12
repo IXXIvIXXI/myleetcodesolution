@@ -1,0 +1,46 @@
+class Solution {
+    public int[] productExceptSelf(int[] nums) {
+        int total = 1;
+        boolean containsZero = false;
+        int zeroIndex = 0;
+        
+        for (int i = 0; i < nums.length; i++) {
+            if (nums[i] == 0) {
+                if (!containsZero) {
+                    containsZero = true;
+                    zeroIndex = i;
+                } else {
+                    return zeroArr(nums.length);
+                }
+            }
+            total *= nums[i];
+        }
+        
+        if (containsZero) {
+            return containsZeroArr(zeroIndex, nums);
+        }
+        
+        int[] arr = new int[nums.length];
+        for (int i = 0; i < nums.length; i++) {
+            arr[i] = total / nums[i];
+        }
+        
+        return arr;
+    }
+    
+    public int[] zeroArr(int len) {
+        return new int[len];
+    }
+    
+    public int[] containsZeroArr(int index, int[] nums) {
+        int total = 1;
+        for (int i = 0; i < nums.length; i++) {
+            if (i != index) {
+                total *= nums[i];
+            }
+        }
+        int[] arr = new int[nums.length];
+        arr[index] = total;
+        return arr;
+    }
+}
