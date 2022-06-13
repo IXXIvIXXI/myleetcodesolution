@@ -1,0 +1,31 @@
+class Solution {
+    public int characterReplacement(String s, int k) {
+        // sliding window problem
+        char[] arr = s.toCharArray();
+        int right = 0;
+        int left = 0;
+        int length = arr.length;
+        
+        HashMap<Character, Integer> cMap = new HashMap<>();
+        
+        int maxLen = 0;
+        int mostFreq = 0;
+        
+        while(right < length) {
+            cMap.put(arr[right], cMap.getOrDefault(arr[right], 0) + 1);
+            mostFreq = Math.max(mostFreq, cMap.get(arr[right]));
+            
+            // move window
+            if ((right - left + 1) - mostFreq > k) {
+                cMap.put(arr[left], cMap.get(arr[left]) - 1);
+                left++;
+            }
+            
+            
+            maxLen = Math.max(maxLen, right - left + 1);
+            right++;
+        }
+        
+        return maxLen;
+    }
+}
