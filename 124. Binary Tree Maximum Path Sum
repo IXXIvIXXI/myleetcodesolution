@@ -1,0 +1,24 @@
+class Solution {
+    int res = 0;
+    public int maxPathSum(TreeNode root) {
+        res = root.val;
+        maxPathSumHelper(root);
+        return res;
+    }
+    
+    private int maxPathSumHelper(TreeNode root) {
+        if (root == null) {
+            return 0;
+        }
+        
+        int leftMax = maxPathSumHelper(root.left);
+        int rightMax = maxPathSumHelper(root.right);
+        
+        leftMax = Math.max(leftMax, 0);
+        rightMax = Math.max(rightMax, 0);
+        
+        res = Math.max(res, root.val + leftMax + rightMax);
+        
+        return root.val + Math.max(leftMax, rightMax);
+    }
+}
