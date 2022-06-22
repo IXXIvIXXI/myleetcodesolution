@@ -1,0 +1,34 @@
+class Solution {
+    public int[] countBits(int n) {
+        // brute force
+        /*
+        int total = 0;
+        int start = 0;
+        int[] arr = new int[n + 1];
+        for(int i = 0; i <= n; i++) {
+            while(start > 0) {
+                total++;
+                start = start & (start - 1);
+            }
+            arr[i] = total;
+            total = 0;
+            start = i + 1;
+        }
+        return arr;
+        */
+        //DP
+        int[] res = new int[n + 1];
+        res[0] = 0;
+        int offset = 1;
+        
+        for (int i = 1; i < res.length; i++) {
+            if (offset * 2 == i) {
+                offset = i;
+            }
+            
+            res[i] = 1 + res[i - offset];
+        }
+        
+        return res;
+    }
+}
