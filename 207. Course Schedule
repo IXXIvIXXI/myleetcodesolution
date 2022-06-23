@@ -1,0 +1,87 @@
+class Solution {
+    HashMap<Integer, List<Integer>> courseMap;
+    public boolean canFinish(int numCourses, int[][] prerequisites) {
+        courseMap = new HashMap<>();
+        int[] indegree = new int[numCourses];
+        for (int i = 0; i < prerequisites.length; i++) {
+            int key = prerequisites[i][0];
+            int val = prerequisites[i][1];
+            if (!courseMap.keySet().contains(key)) {
+                courseMap.put(key, new ArrayList<Integer>());
+            }
+            courseMap.get(key).add(val);
+            indegree[val]++;
+        }
+        
+        Queue<Integer> q = new LinkedList<>();
+        for (int i = 0; i < numCourses; i++) {
+            if (indegree[i] == 0) {
+                q.add(i);
+            }
+        }
+        
+        while (!q.isEmpty()) {
+            int currCourse = q.poll();
+            if (courseMap.get(currCourse) != null) {
+                List<Integer> courseList = courseMap.get(currCourse);
+                for (int course : courseList) {
+                    indegree[course]--;
+                    if (indegree[course] == 0) {
+                        q.add(course);
+                    }
+                }
+            }
+            numCourses--;
+        }
+        
+        return numCourses == 0;
+    }
+    /*
+    HashMap<Integer, List<Integer>> courseMap;
+    Set<Integer> s;
+    public boolean canFinish(int numCourses, int[][] prerequisites) {
+        courseMap = new HashMap<>();
+        s = new HashSet<>();
+        for (int i = 0; i < prerequisites.length; i++) {
+            int key = prerequisites[i][0];
+            int val = prerequisites[i][1];
+            if (!courseMap.keySet().contains(key)) {
+                courseMap.put(key, new ArrayList<Integer>());
+            }
+            courseMap.get(key).add(val);
+        }
+        
+        
+        for (int key : courseMap.keySet()) {
+            if (!canFinishHelper(key)) {
+                return false;
+            }
+        }
+        
+        return true;
+    }
+    
+    private boolean canFinishHelper(int course) {
+        if (!courseMap.keySet().contains(course)) {
+            // check courses at the end
+            return true;
+        } else if (s.contains(course)) {
+            return false;
+        } else if (courseMap.get(course).size() == 0) {
+            return true;
+        }
+        
+        s.add(course);
+        
+        for (int upperCourse : courseMap.get(course)) {
+            if (!canFinishHelper(upperCourse)) {
+                return false;
+            }
+        }
+        
+        s.remove(course);
+        courseMap.put(course, new ArrayList<Integer>());
+        return true;
+    }
+    */
+}
