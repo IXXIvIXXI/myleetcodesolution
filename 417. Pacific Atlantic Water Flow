@@ -1,0 +1,71 @@
+class Solution {
+    private static final int[][] DIRECTIONS = new int[][]{{0, 1}, {1, 0}, {-1, 0}, {0, -1}};
+    private int rowNum;
+    private int colNum;
+    private int[][] waters;
+
+    public List<List<Integer>> pacificAtlantic(int[][] heights) {
+        if (heights.length == 0 || heights[0].length == 0) {
+            return new ArrayList<>();
+        }
+        
+        rowNum = heights.length;
+        colNum = heights[0].length;
+        waters = heights;
+        
+        boolean[][] pacific = new boolean[rowNum][colNum];
+        boolean[][] atlantic = new boolean[rowNum][colNum];
+        
+        for (int i = 0; i < colNum; i++) {
+            // apply dfs to pacific top row
+            dfs(0, i, pacific);
+            
+            // apply dfs to atlantic bottom row
+            dfs(rowNum - 1, i, atlantic);
+        }
+        
+        for (int i = 0; i < rowNum; i++) {
+            // apply dfs to pacific left row
+            dfs(i, 0, pacific);
+            
+            // apply dfs to atlantic right row
+            dfs(i, colNum - 1, atlantic);
+        }
+        
+        List<List<Integer>> res = new ArrayList<>();
+        for (int i = 0; i < rowNum; i++) {
+            for (int j = 0; j < colNum; j++) {
+                if (pacific[i][j] && atlantic[i][j]) {
+                    res.add(List.of(i, j));
+                }
+            }
+        }
+        
+        return res;
+    }
+    
+    private void dfs(int row, int col, boolean[][] reachable) {
+        reachable[row][col] = true;
+        for (int[] dir : DIRECTIONS) {
+            int newRow = row + dir[0];
+            int newCol = col + dir[1];
+            
+            // check if its out of bounds
+            if (newRow < 0 || newRow >= rowNum || newCol < 0 || newCol >= colNum) {
+                continue;
+            }
+            
+            // check if it has been explored
+            if (reachable[newRow][newCol]) {
+                continue;
+            }
+            
+            // check if the next cell is reachable
+            if (waters[row][col] > waters[newRow][newCol]) {
+                continue;
+            }
+            
+            dfs(newRow, newCol, reachable);
+        }
+    }
+}
