@@ -1,0 +1,49 @@
+class Solution {
+    // Integer[] cache;
+    // int[] num;
+    public int combinationSum4(int[] nums, int target) {
+        int[] cache = new int[target + 1];
+        
+        // method 1 bottom up
+        cache[0] = 1;
+        for (int i = 1; i < target + 1; i++) {
+            for (int num : nums) {
+                if (i - num >= 0) {
+                    cache[i] += cache[i - num];
+                }
+            }
+        }
+        
+        return cache[target];
+        
+        // method 2 top down
+        
+        // this.cache = new Integer[target + 1];
+        // this.num = nums;
+        // return combinationHelper(target);
+    }
+    
+    /*
+    private int combinationHelper(int currSum) {
+        if (currSum == 0) {
+            return 1;
+        }
+        
+        if (currSum < 0) {
+            return 0;
+        }
+        
+        if (cache[currSum] != null) {
+            return cache[currSum];
+        }
+        
+        int total = 0;
+        for (int n : num) {
+            total += combinationHelper(currSum - n);
+        }
+        cache[currSum] = total;
+        
+        return total;
+    }
+    */
+}
