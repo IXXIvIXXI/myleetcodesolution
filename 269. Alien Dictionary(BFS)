@@ -1,0 +1,54 @@
+HashMap<Character, List<Character>> cMap;
+    HashMap<Character, Boolean> visited;
+    HashMap<Character, Integer> counts;
+    StringBuilder res;
+    public String alienOrder(String[] words) {
+        cMap = new HashMap<>();
+        counts = new HashMap<>();
+        for (String word : words) {
+            for (char c : word.toCharArray()) {
+                cMap.putIfAbsent(c, new ArrayList<>());
+                counts.put(c, 0);
+            }
+        }
+        
+        for(int i = 0; i < words.length - 1; i++) {
+            String word1 = words[i];
+            String word2 = words[i + 1];
+            int minLength = Math.min(word1.length(), word2.length());
+            if (word1.length() > word2.length() && word1.startsWith(word2)){
+                return "";
+            }
+            
+            for (int j = 0; j < minLength; j++) {
+                if (word1.charAt(j) != word2.charAt(j)) {
+                    char key = word1.charAt(j);
+                    char val = word2.charAt(j);
+                    cMap.get(key).add(val);
+                    counts.put(val, counts.get(val) + 1);
+                    break;
+                }
+            }
+        }
+        
+        Queue<Character> cQ = new LinkedList<>();
+        for (char c : counts.keySet()) {
+            if (counts.get(c).equals(0)) {
+                System.out.println(c);
+                cQ.add(c);
+            }
+        }
+        
+        this.res = new StringBuilder();
+        while (!cQ.isEmpty()) {
+            char c = cQ.remove();
+            res.append(c);
+            for (char nei : cMap.get(c)) {
+                counts.put(nei, counts.get(nei) - 1);
+                if (counts.get(nei).equals(0)) {
+                    cQ.add(nei);
+                }
+            }
+        }
+        return res.toString();
+}
