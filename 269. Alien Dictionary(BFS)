@@ -50,5 +50,8 @@ HashMap<Character, List<Character>> cMap;
                 }
             }
         }
+        if (res.length() < counts.size()) {
+            return "";
+        }
         return res.toString();
 }
