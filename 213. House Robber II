@@ -1,0 +1,38 @@
+class Solution {
+    public int rob(int[] nums) {
+        if (nums.length == 1) {
+            return nums[0];
+        }
+        
+        int[] house1 = getHouses(nums, 0, nums.length - 2);
+        int[] house2 = getHouses(nums, 1, nums.length - 1);
+        
+        int max1 = findMax(house1);
+        int max2 = findMax(house2);
+        int max = Math.max(max1, max2);
+        
+        return max;
+    }
+    
+    private int[] getHouses(int[] nums, int start, int end) {
+        int[] copy = new int[end - start + 1];
+        for (int i = 0; i < copy.length; i++){
+            copy[i] = nums[i + start];
+        }
+        
+        return copy;
+    }
+    
+    private int findMax(int[] houses) {
+        int max1 = 0;
+        int max2 = 0;
+        
+        for (int i = 0; i < houses.length; i++) {
+            int temp = Math.max(max1 + houses[i], max2);
+            max1 = max2;
+            max2 = temp;
+        }
+        
+        return max2;
+    }
+}
