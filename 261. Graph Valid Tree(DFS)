@@ -1,0 +1,34 @@
+class Solution {
+    List<List<Integer>> adjacencyList;
+    Set<Integer> visited;
+    public boolean validTree(int n, int[][] edges) {
+        if (edges.length != n - 1) {
+            return false;
+        }
+        adjacencyList = new ArrayList<>();
+        visited = new HashSet<>();
+        for (int i = 0; i < n; i++) {
+            adjacencyList.add(new ArrayList<>());
+        }
+        
+        for (int[] edge : edges) {
+            adjacencyList.get(edge[0]).add(edge[1]);
+            adjacencyList.get(edge[1]).add(edge[0]);
+        }
+        
+        dfs(0);
+        
+        return visited.size() == n;
+    }
+    
+    private void dfs(int n) {
+        if (visited.contains(n)) {
+            return;
+        }
+        
+        visited.add(n);
+        for (int nei : adjacencyList.get(n)) {
+            dfs(nei);
+        }
+    }
+}
