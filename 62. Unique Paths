@@ -1,0 +1,15 @@
+class Solution {
+    public int uniquePaths(int m, int n) {
+        int[][] rows = new int[m][n];
+        for(int[] row : rows) {
+            Arrays.fill(row, 1);
+        }
+        for (int i = m - 2; i >= 0; i--) {
+            for (int j = n - 2; j >= 0; j--) {
+                rows[i][j] = rows[i + 1][j] + rows[i][j + 1];
+            }
+        }
+        
+        return rows[0][0];
+    }
+}
