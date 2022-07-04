@@ -1,23 +1,24 @@
 // sliding window problem
 class Solution {
     public int lengthOfLongestSubstring(String s) {
-        int pointer1 = 0;
-        int pointer2 = 0;
-        int maxLength = 0;
-        HashSet<Character> charSet = new HashSet();
-        
-        while (pointer2 < s.length()) {
-            char currTail = s.charAt(pointer2);
-            char currHead = s.charAt(pointer1);
-            if (!charSet.contains(currTail)) {
-                charSet.add(currTail);
-                pointer2++;
-                maxLength = Math.max(charSet.size(), maxLength);
+        int longest = 0;
+        Set<Character> charSet = new HashSet<>();
+        int start = 0;
+        int end = 0;
+        // end < s.length() would make sure we add all the characters to the set
+        // no jumping character
+        while (end < s.length()) {
+            char currChar = s.charAt(end);
+            if (!charSet.contains(currChar)) {
+                end++;
+                charSet.add(currChar);
+                // update longest only when the curr character is not in the set
+                longest = Math.max(charSet.size(), longest);
             } else {
-                charSet.remove(currHead);
-                pointer1++;
+                charSet.remove(s.charAt(start));
+                start++;
             }
         }
-        return maxLength;
+        return longest;
     }
 }
