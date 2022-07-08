@@ -1,34 +1,27 @@
 class Solution {
     public int[] countBits(int n) {
-        // brute force
         /*
-        int total = 0;
-        int start = 0;
-        int[] arr = new int[n + 1];
-        for(int i = 0; i <= n; i++) {
-            while(start > 0) {
-                total++;
-                start = start & (start - 1);
-            }
-            arr[i] = total;
-            total = 0;
-            start = i + 1;
-        }
-        return arr;
-        */
-        //DP
-        int[] res = new int[n + 1];
-        res[0] = 0;
+         * 0 - 0000 - 0
+         * 1 - 0001 - 1 + dp[1-1]
+         * 2 - 0010 - 1 + dp[2-2]
+         * 3 - 0100 - 1 + dp[3-2]
+         * 4 - 1000 - 1 + dp[4-4]
+         * 5 - 0101 - 1 + dp[5-4]
+         * 6 - 0110 - 1 + dp[6-4]
+         * 7 - 0111 - 1 + dp[7-4]
+         * 8 - 1000 - 1 + dp[8-8]
+         *
+         * offset is the power of 2
+         */
+        int[] dp = new int[n + 1];
+        dp[0] = 0;
         int offset = 1;
-        
-        for (int i = 1; i < res.length; i++) {
+        for (int i = 1; i < n + 1; i++) {
             if (offset * 2 == i) {
                 offset = i;
             }
-            
-            res[i] = 1 + res[i - offset];
+            dp[i] = 1 + dp[i - offset];
         }
-        
-        return res;
+        return dp;
     }
 }
