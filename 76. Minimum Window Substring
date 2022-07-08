@@ -1,50 +1,55 @@
 class Solution {
     public String minWindow(String s, String t) {
-        // sliding window
-        if (t.length() == 0 || s.length() == 0) {
+        if (s.length() == 0 || t.length() == 0) {
             return "";
         }
-        HashMap<Character, Integer> countT = updateCountT(t);
         
-        int have = 0;
-        String res = "";
+        int left = 0;
         int resLen = s.length() + 1;
-        int count = 0;
-        int l = 0;
+        String res = "";
+        int have = 0;
+        int need = t.length();
         
-        for (int r = 0; r < s.length(); r++) {
-            if (countT.containsKey(s.charAt(r))) {
-               countT.put(s.charAt(r), countT.get(s.charAt(r)) - 1);
-               if (countT.get(s.charAt(r)) >= 0) {
-                   count++;
-               }
+        // a map that records numbers of needed character
+        HashMap<Character, Integer> charM = new HashMap<Character, Integer>();
+        for (int i = 0; i < t.length(); i++) {
+            charM.put(t.charAt(i), charM.getOrDefault(t.charAt(i), 0) + 1);
+        }
+        
+        for (int right = 0; right < s.length(); right++) {
+            char curr = s.charAt(right);
+            if (charM.keySet().contains(curr)) {
+                charM.put(curr, charM.get(curr) - 1);
+                if (charM.get(curr) >= 0) {
+                    // increament the number of qualified characters
+                    // if the amount is great than or equal 0
+                    have++;
+                }
             }
             
-            while(count == t.length()) {
-                if (r - l + 1 < resLen) {
-                    resLen = r - l + 1;
-                    res = s.substring(l, r+1);
+            while (have == need) {
+                int length = right - left + 1;
+                
+                // update res is it's shorter
+                if (length < resLen) {
+                    resLen = length;
+                    res = s.substring(left, right + 1);
                 }
                 
-                if (countT.containsKey(s.charAt(l))) {
-                    countT.put(s.charAt(l), countT.get(s.charAt(l)) + 1);
-                    if(countT.get(s.charAt(l)) > 0) {
-                      count--;
+                // if the character is in set, remove it from the end of string
+                if (charM.keySet().contains(s.charAt(left))) {
+                    // increament the needed amount by 1
+                    charM.put(s.charAt(left), charM.get(s.charAt(left)) + 1);
+                    // if the amount is positive, decreament have because we need to add a new one
+                    if (charM.get(s.charAt(left)) > 0) {
+                        have--;
                     }
                 }
-                l++;
+                // increament left pointer
+                left++;
             }
-            
-        }
-        return res;
-    }
-    
-    public HashMap<Character, Integer> updateCountT(String t) {
-        HashMap<Character, Integer> countT = new HashMap<>();
-        for (int i = 0; i < t.length(); i++) {
-            countT.put(t.charAt(i), countT.getOrDefault(t.charAt(i), 0) + 1);
         }
         
-        return countT;
+        return res;
     }
 }
