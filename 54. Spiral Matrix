@@ -1,0 +1,41 @@
+class Solution {
+    public List<Integer> spiralOrder(int[][] matrix) {
+        if (matrix == null || matrix.length == 0) {
+            return null;
+        }
+        
+        int total = matrix.length * matrix[0].length;
+        int top = 0;
+        int left = 0;
+        int right = matrix[0].length - 1;
+        int bottom = matrix.length - 1;
+        List<Integer> res = new ArrayList<>();
+        
+        while (res.size() < total) {
+            for (int i = left; i <= right; i++) {
+                res.add(matrix[top][i]);
+            }
+            top++;
+            
+            // res.size() < total check is needed if we finished early
+            // we don't want our for loop to add extra number
+            // since we might modify values of right, bot, and left
+            for (int i = top; i <= bottom && res.size() < total; i++) {
+                res.add(matrix[i][right]);
+            }
+            right--;
+            
+            for (int i = right; i >= left && res.size() < total; i--) {
+                res.add(matrix[bottom][i]);
+            }
+            bottom--;
+            
+            for (int i = bottom; i >= top && res.size() < total; i--) {
+                res.add(matrix[i][left]);
+            }
+            left++;
+        }
+        
+        return res;
+    }
+}
