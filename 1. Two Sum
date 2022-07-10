@@ -1,0 +1,26 @@
+class Solution {
+    public int[] twoSum(int[] nums, int target) {
+        // Map stroes value as key and index as val
+        Map<Integer, Integer> elements = new HashMap<>();
+        
+        int[] res = new int[2];
+        int i = 0;
+        for (int num : nums) {
+            // get the difference between target and current val
+            int diff = target - num;
+            
+            // if the difference is in map, then we get two values
+            if (elements.containsKey(diff)) {
+                int fstIndex = elements.get(diff);
+                res[0] = fstIndex;
+                res[1] = i;
+                return res;
+            }
+            
+            // add num and its pos to map
+            elements.put(num, i);
+            i++;
+        }
+        return res;
+    }
+}
