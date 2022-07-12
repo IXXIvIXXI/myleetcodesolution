@@ -1,0 +1,25 @@
+class Solution {
+    public int[] topKFrequent(int[] nums, int k) {
+        Map<Integer, Integer> countMap = new HashMap<>();
+        for (int num : nums) {
+            countMap.put(num, countMap.getOrDefault(num, 0) + 1);
+        }
+        
+        // sort in ascending order, (a,b) -> b - a
+        PriorityQueue<int[]> q = new PriorityQueue<>((a,b) -> b[1] - a[1]);
+        for (int key : countMap.keySet()) {
+            int[] keyVal = new int[2];
+            keyVal[0] = key;
+            keyVal[1] = countMap.get(key);
+            q.add(keyVal);
+        }
+        
+        int[] res = new int[k];
+        for(int i = 0; i < k; i++) {
+            int[] data = q.poll();
+            res[i] = data[0];
+        }
+        
+        return res;
+    }
+}
