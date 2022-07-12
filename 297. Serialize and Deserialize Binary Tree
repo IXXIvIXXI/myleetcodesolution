@@ -11,39 +11,35 @@ public class Codec {
 
     // Encodes a tree to a single string.
     public String serialize(TreeNode root) {
-        // level order traversal
-        // left child (n*2+1)
-        // right child (n*2+2)
-        
+        // root,left,right is the pattern of the string
         if (root == null) {
-            return "null";
+            return null;
         }
-        String left = serialize(root.left);
-        String right = serialize(root.right);
-        return root.val + "," + left + "," + right;
+        return root.val + "," + serialize(root.left) + "," + serialize(root.right);
     }
 
     int pos = 0;
     // Decodes your encoded data to tree.
     public TreeNode deserialize(String data) {
-        String[] arr = data.split(",");
-        if (arr.length == 0) {
+        // check edge case when the string is null
+        if (data == null) {
             return null;
         }
-        return deserializeHelper(arr);
+        String[] vals = data.split(",");
+        return deserializeHelper(vals);
     }
     
-    private TreeNode deserializeHelper(String[] arr) {
-        if (arr[pos].equals("null")) {
+    public TreeNode deserializeHelper(String[] vals) {
+        if (vals[pos].equals("null")) {
             pos++;
             return null;
         }
         
-        TreeNode root = new TreeNode(Integer.parseInt(arr[pos++]));
-        root.left = deserializeHelper(arr);
-        root.right = deserializeHelper(arr);
-        return root;
-    }
+        TreeNode node = new TreeNode(Integer.parseInt(vals[pos++]));
+        node.left = deserializeHelper(vals);
+        node.right = deserializeHelper(vals);
+        return node;
+    } 
 }
 
 // Your Codec object will be instantiated and called as such:
