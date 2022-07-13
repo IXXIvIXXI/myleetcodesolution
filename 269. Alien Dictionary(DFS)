@@ -1,42 +1,42 @@
 class Solution {
-    HashMap<Character, List<Character>> cMap;
-    HashMap<Character, Boolean> visited;
-    StringBuilder res;
-    public String alienOrder(String[] words) {
-        cMap = new HashMap<>();
+    StringBuilder s = new StringBuilder();
+    Map<Character, Boolean> visited = new HashMap<Character, Boolean>();;
+    Map<Character, List<Character>> cMap = new HashMap<>();
+    public String alienOrder(String[] words) { 
+        
         for (String word : words) {
             for (char c : word.toCharArray()) {
                 cMap.putIfAbsent(c, new ArrayList<>());
             }
         }
         
-        for(int i = 0; i < words.length - 1; i++) {
-            String word1 = words[i];
-            String word2 = words[i + 1];
-            int minLength = Math.min(word1.length(), word2.length());
-            if (word1.length() > word2.length() && word1.startsWith(word2)){
+        for (int i = 1; i < words.length; i++) {
+            String fst = words[i - 1];
+            String snd = words[i];
+            
+            if (fst.length() > snd.length() && fst.startsWith(snd)) {
                 return "";
             }
-            
+            // fst > snd
+            int minLength = Math.min(fst.length(), snd.length());
             for (int j = 0; j < minLength; j++) {
-                if (word1.charAt(j) != word2.charAt(j)) {
-                    char key = word1.charAt(j);
-                    char val = word2.charAt(j);
-                    cMap.get(key).add(val);
+                char c1 = fst.charAt(j);
+                char c2 = snd.charAt(j);
+                
+                if (c1 != c2) {
+                    cMap.get(c1).add(c2);
                     break;
                 }
             }
         }
         
-        visited = new HashMap<Character, Boolean>();
-        this.res = new StringBuilder();
         for (char c : cMap.keySet()) {
             if (dfs(c)) {
                 return "";
             }
         }
         
-        return res.reverse().toString();
+        return s.reverse().toString();
     }
     
     private Boolean dfs(char c) {
@@ -51,7 +51,7 @@ class Solution {
             }
         }
         visited.put(c, false);
-        res.append(c);
+        s.append(c);
         return false;
     }
 }
