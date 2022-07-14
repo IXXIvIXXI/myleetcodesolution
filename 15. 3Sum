@@ -1,29 +1,37 @@
 class Solution {
+    List<List<Integer>> res = new ArrayList<>();
     public List<List<Integer>> threeSum(int[] nums) {
         Arrays.sort(nums);
-        List<List<Integer>> res = new ArrayList<>();
         for (int i = 0; i < nums.length; i++) {
-            if (i == 0 || nums[i - 1] != nums[i]) {
-              getSum(nums, i, res);
+            // if two consecutive numbers are equal
+            // we just pass the current one because
+            // we've already got its result
+            if (i > 0 && nums[i] == nums[i - 1]) {
+                continue;
             }
+            getSum(nums, i);
         }
         return res;
     }
     
-    void getSum(int[] nums, int i, List<List<Integer>> res) {
-        int lo = i + 1;
-        int hi = nums.length - 1;
-        while (lo < hi) {
-            int sum = nums[i] + nums[lo] + nums[hi];
-            if (sum < 0) {
-                lo++;
-            } else if (sum > 0) {
-                hi--;
+    private void getSum(int[] nums, int i) {
+        int left = i + 1;
+        int right = nums.length - 1;
+        
+        while (left < right) {
+            int three = nums[left] + nums[right] + nums[i];
+            
+            if (three > 0) {
+                right--;
+            } else if (three < 0) {
+                left++;
             } else {
-                res.add(Arrays.asList(nums[i], nums[lo], nums[hi]));
-                lo++;
-                while ((nums[lo] == nums[lo - 1]) && lo < hi) {
-                    lo++;
+                res.add(Arrays.asList(nums[i], nums[left], nums[right]));
+                // this will avoid adding same stuff to the list if there
+                // are multiple same numbers on the left
+                left++;
+                while (nums[left] == nums[left - 1] && left < right) {
+                    left++;
                 }
             }
         }
