@@ -6,7 +6,12 @@ class Solution {
                 if (text1.charAt(i) == text2.charAt(j)) {
                     dp[i][j] = dp[i + 1][j + 1] + 1;
                 } else {
-                    dp[i][j] = Math.max(dp[i + 1][j], dp[i][j + 1]);
+                    // if two characters are not equivalent, we
+                    // only take the largest value that is a grid
+                    // to the right or down of dp[i][j]
+                    int right = dp[i][j + 1];
+                    int down = dp[i + 1][j];
+                    dp[i][j] = Math.max(right, down);
                 }
             }
         }
