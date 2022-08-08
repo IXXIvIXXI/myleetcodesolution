@@ -1,0 +1,40 @@
+class Solution {
+    public int kthSmallest(int[][] matrix, int k) {
+        int n = matrix.length;
+        int start = matrix[0][0];
+        int end = matrix[n - 1][n - 1];
+        int res = 0;
+        
+        while (start <= end) {
+            int mid = start + (end - start) / 2;
+            int count = countIndex(matrix, mid);
+            
+            if (count >= k) {
+                res = mid;
+                end = mid - 1;
+            } else {
+                start = mid + 1;
+            }
+        }
+        
+        return res;
+    }
+    
+    private int countIndex(int[][] matrix, int mid) {
+        int count = 0;
+        int n = matrix.length;
+        int row = n - 1;
+        int col = 0;
+        
+        while (row >= 0 && col < n) {
+            if (matrix[row][col] > mid) {
+                row--;
+            } else {
+                count += row + 1;
+                col++;
+            }
+        }
+        
+        return count;
+    }
+}
