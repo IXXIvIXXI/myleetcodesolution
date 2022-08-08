@@ -1,0 +1,18 @@
+class Solution {
+    public int arithmeticTriplets(int[] nums, int diff) {
+        int[] map = new int[201];
+        int res = 0;
+        
+        for (int num : nums) {
+            map[num]++;
+            
+            if (num - diff >= 0) {
+                map[num] += map[num - diff];
+            }
+            
+            if (map[num] >= 3) res++;
+        }
+        
+        return res;
+    }
+}
