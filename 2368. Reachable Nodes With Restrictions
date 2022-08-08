@@ -1,0 +1,32 @@
+class Solution {
+    Map<Integer, List<Integer>> adjacencyList;
+    int count;
+    public int reachableNodes(int n, int[][] edges, int[] restricted) {
+        adjacencyList = new HashMap<>();
+        boolean[] visited = new boolean[n];
+        for (int num : restricted) {
+            visited[num] = true;
+        }
+        
+        for (int i = 0; i < n; i++) {
+            adjacencyList.put(i, new ArrayList<>());
+        }
+        
+        for (int[] edge : edges) {
+            adjacencyList.get(edge[0]).add(edge[1]);
+            adjacencyList.get(edge[1]).add(edge[0]);
+        }
+        
+        count = 0;
+        dfs(0, visited);
+        return count;
+    }
+    
+    private void dfs(int curr, boolean[] visited) {
+        visited[curr] = true;
+        count++;
+        for (int nei : adjacencyList.get(curr)) {
+            if (!visited[nei]) dfs(nei, visited);
+        } 
+    }
+}
