@@ -1,0 +1,45 @@
+class Solution {
+    public List<String> fullJustify(String[] words, int maxWidth) {
+        List<String> res = new ArrayList<>();
+        int left = 0;
+        int n = words.length;
+        while (left < n) {
+            int right = left + 1;
+            int lenLength = words[left].length();
+            while (right < n && (lenLength + words[right].length() + (right - left - 1) < maxWidth)) {
+                lenLength += words[right].length();
+                right++;
+            }
+            int diff = maxWidth - lenLength;
+            int numWord = right - left;
+            if (numWord == 1 || right >= n) res.add(leftJustify(left, right, diff, words));
+            else res.add(middleJustify(left, right, diff, words));
+            left = right;
+        }
+        
+        return res;
+    }
+    
+    private String leftJustify(int left, int right, int diff, String[] words) {
+        int padding = diff - (right - left - 1);
+        
+        StringBuilder res = new StringBuilder(words[left]);
+        for (int i = left + 1; i < right; i++) {
+            res.append(" " + words[i]);
+        }
+        res.append(" ".repeat(padding));
+        return res.toString();
+    }
+    
+    private String middleJustify(int left, int right, int diff, String[] words) {
+        int spacesNeeded = right - left - 1;
+        int spaces = diff / spacesNeeded;
+        int extra = diff % spacesNeeded;
+        StringBuilder res = new StringBuilder(words[left]);
+        for (int i = left + 1; i < right; i++) {
+            int spacesToApply = spaces + (extra-- > 0 ? 1 : 0);
+            res.append(" ".repeat(spacesToApply) + words[i]);
+        }
+        return res.toString();
+    }
+}
