@@ -1,0 +1,34 @@
+class Solution {
+    public int divide(int dividend, int divisor) {
+        int sign = (dividend < 0) ^ (divisor < 0) ? -1 : 1; 
+        
+        long dd = Math.abs((long)dividend);
+        long dv = Math.abs((long)divisor);
+        
+        long res = 0;
+        
+        while (dv <= dd) {
+            long mul = 1;
+            long tmp = dv;
+            
+            while ((tmp << 1) <= dd) {
+                mul <<= 1;
+                tmp <<= 1;
+            }
+            
+            res += mul;
+            dd -= tmp;
+        }
+        
+        System.out.println(res);
+        res = res * sign;
+        System.out.println(sign);
+        
+        
+        if (res >= Integer.MAX_VALUE) {
+            return Integer.MAX_VALUE;
+        }
+        
+        return (int)res;
+    }
+}
