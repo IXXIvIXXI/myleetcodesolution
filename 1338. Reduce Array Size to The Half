@@ -1,0 +1,26 @@
+class Solution {
+    public int minSetSize(int[] arr) {
+        Map<Integer, Integer> cMap = new HashMap<>();
+        
+        for (int num : arr) {
+            cMap.putIfAbsent(num, 0);
+            cMap.put(num, cMap.get(num) + 1);
+        }
+        
+        List<Integer> countList = new ArrayList<>(cMap.values());
+        Collections.sort(countList, (a,b) -> b - a);
+        int size = 0;
+        int removed = 0;
+        
+        for (int count : countList) {
+            removed += count;
+            size++;
+            
+            if (removed >= arr.length / 2) {
+                break;
+            }
+        }
+        
+        return size;
+    }
+}
