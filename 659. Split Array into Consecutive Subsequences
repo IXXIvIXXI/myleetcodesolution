@@ -1,0 +1,32 @@
+class Solution {
+    public boolean isPossible(int[] nums) {
+        HashMap<Integer, Integer> availMap = new HashMap<>();
+        HashMap<Integer, Integer> wantMap = new HashMap<>();
+        
+        for (int num : nums) {
+            availMap.put(num, availMap.getOrDefault(num, 0) + 1);
+        }
+        
+        for (int num : nums) {
+            if (availMap.get(num) <= 0) continue;
+            else if (wantMap.getOrDefault(num, 0) > 0) {
+                availMap.put(num, availMap.get(num) - 1);
+
+                wantMap.put(num, wantMap.get(num) - 1);
+                wantMap.put(num+1, wantMap.getOrDefault(num+1, 0) + 1);
+            } else if (availMap.getOrDefault(num, 0) > 0 &&
+                       availMap.getOrDefault(num + 1, 0) > 0 &&
+                       availMap.getOrDefault(num + 2, 0) > 0) {
+                availMap.put(num, availMap.get(num) - 1);
+                availMap.put(num + 1, availMap.get(num + 1) - 1);
+                availMap.put(num + 2, availMap.get(num + 2) - 1);
+    
+                wantMap.put(num + 3, wantMap.getOrDefault(num + 3, 0) + 1);
+            } else {
+                return false;
+            }
+        }
+        
+        return true;
+    }
+}
