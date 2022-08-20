@@ -1,0 +1,20 @@
+class Solution {
+    public int minAddToMakeValid(String s) {
+        int ret = 0, count = 0;
+        
+        for (char c : s.toCharArray()) {
+            if (c == '(') {
+                count++;
+            } else {
+                count--;
+            }
+            
+            if (count == -1) {
+                ret++;
+                count = 0;
+            }
+        }
+        
+        return ret + count;
+    }
+}
