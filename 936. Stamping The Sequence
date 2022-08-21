@@ -1,0 +1,52 @@
+class Solution {
+    public int[] movesToStamp(String stamp, String target) {
+        char[] sArr = stamp.toCharArray();
+        char[] tArr = target.toCharArray();
+        boolean[] visited = new boolean[tArr.length];
+        List<Integer> res = new ArrayList<>();
+        int count = 0;
+        
+        while (count != tArr.length) {
+            boolean didChange = false;
+            for (int i = 0; i <= tArr.length - sArr.length; i++) {
+                if (!visited[i] && canReplace(tArr, i, sArr)) {
+                    count = replace(tArr, i, sArr.length, count);
+                    didChange = true;
+                    visited[i] = true; // mark i as visited if it's been replaced
+                    res.add(i);
+                }
+                
+               if (count == tArr.length) break;
+            }
+            
+            if (!didChange) return new int[0];
+        }
+        
+        int[] result = new int[res.size()];
+        int k = 0;
+        
+        // since we work in a backwards way, we need to reverse our solution
+        for (int i = res.size() - 1; i >= 0; i--) {
+            result[k++] = res.get(i);
+        }
+        
+        return result;
+    }
+    
+    private boolean canReplace(char[] tArr, int start, char[] sArr) {
+        for (int i = 0; i < sArr.length; i++) {
+            if (tArr[i + start] != '?' && tArr[i + start] != sArr[i]) return false;
+        }
+        return true;
+    }
+    
+    private int replace(char[] tArr, int start, int len, int count) {
+        for (int i = 0; i < len; i++) {
+            if (tArr[start + i] != '?') { // if it's been replaced by the question mark, there's no need to replace again
+                tArr[start + i] = '?';
+                count++;    
+            }
+        }
+        return count;
+    }
+}
