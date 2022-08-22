@@ -1,0 +1,30 @@
+class Solution {
+    int maxVal = 0;
+    
+    public int longestConsecutive(TreeNode root) {
+        longest(root);
+        return maxVal;
+    }
+    
+    public int[] longest(TreeNode root) {
+        if (root == null) {
+            return new int[] {0,0};
+        }
+        
+        int increa = 1, decrea = 1;
+        if (root.left != null) {
+            int[] left = longest(root.left);
+            if (root.val == root.left.val + 1) decrea = left[1] + 1;
+            if (root.val + 1 == root.left.val) increa = left[0] + 1;
+        }
+        
+        if (root.right != null) {
+            int[] right = longest(root.right);
+            if (root.val == root.right.val + 1) decrea = Math.max(decrea, right[1] + 1);
+            if (root.val + 1 == root.right.val) increa = Math.max(increa, right[0] + 1);
+        }
+        
+        maxVal = Math.max(maxVal, increa + decrea - 1);
+        return new int[] {increa, decrea};
+    }
+}
