@@ -1,0 +1,23 @@
+class Solution {
+    public boolean isHappy(int n) {
+        Set<Integer> visited = new HashSet<>();
+        int happy = n;
+        while (!visited.contains(happy)) {
+            visited.add(happy);
+            happy = getHappy(happy);
+            if (happy == 1) return true;
+        }
+        
+        return false;
+    }
+    
+    private int getHappy(int n) {
+        int output = 0;
+        while (n != 0) {
+            int currDigit = n % 10;
+            output += Math.pow(currDigit, 2);
+            n /= 10;
+        }
+        return output;
+    }
+}
