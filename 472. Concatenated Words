@@ -1,33 +1,29 @@
 class Solution {
     public List<String> findAllConcatenatedWordsInADict(String[] words) {
         Arrays.sort(words, (a, b) -> a.length() - b.length());
+        Set<String> wordSet = new HashSet<String>();
         List<String> res = new ArrayList<>();
-        
-        HashSet<String> preWords = new HashSet<>();
-        
         for (String word : words) {
-            if (topDown(word, preWords, 0, new Boolean[word.length()])) {
+            if (topDown(word, wordSet, 0)) {
                 res.add(word);
             }
-            preWords.add(word);
+            wordSet.add(word);
         }
         
         return res;
     }
     
-    private boolean topDown(String word, HashSet<String> wordDict, int startIndex, Boolean[] memo) {
-        if (word.length() == startIndex) return true;
+    private boolean topDown(String s, Set<String> words, int start) {
+        if (s.length() == start) {
+            return true;
+        }
         
-        if (memo[startIndex] != null) return memo[startIndex];
-        
-        for (int end = startIndex + 1; end <= word.length(); end++) {
-            if (wordDict.contains(word.substring(startIndex, end)) && topDown(word, wordDict, end, memo)) {
-                memo[startIndex] = true;
+        for (int end = start + 1; end <= s.length(); end++) {
+            if (words.contains(s.substring(start, end)) && topDown(s, words, end)) {
                 return true;
             }
         }
         
-        memo[startIndex] = false;
         return false;
     }
 }
