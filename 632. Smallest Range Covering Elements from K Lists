@@ -1,0 +1,45 @@
+class Data implements Comparable<Data> {
+    int index;
+    int i;
+    int data;
+    Data(int index, int i, int data) {
+        this.index = index;
+        this.i = i;
+        this.data = data;
+    }
+    
+    public int compareTo(Data d) {
+        return this.data - d.data;
+    }
+}
+
+class Solution {
+    public int[] smallestRange(List<List<Integer>> nums) {
+        PriorityQueue<Data> pq = new PriorityQueue<>();
+        int end = Integer.MIN_VALUE;
+        int[] ans = new int[2];
+        
+        for (int i = 0; i < nums.size(); i++) {
+            int cur = nums.get(i).get(0);
+            end = Math.max(end, cur);
+            pq.add(new Data(i, 0, cur));
+        }
+        
+        int len = Integer.MAX_VALUE;
+        while (pq.size() == nums.size()) { // if the pq doesn't have the same amount of element as the array size, we stop
+            Data cur = pq.poll();
+            
+            if (end - cur.data < len) {
+                ans[0] = cur.data;
+                ans[1] = end;
+                len = end - cur.data;
+            }
+            
+            if (cur.i + 1 >= nums.get(cur.index).size()) continue;
+            end = Math.max(end, nums.get(cur.index).get(cur.i + 1));
+            pq.add(new Data(cur.index, cur.i + 1, nums.get(cur.index).get(cur.i + 1)));
+        }
+        
+        return ans;
+    }
+}
