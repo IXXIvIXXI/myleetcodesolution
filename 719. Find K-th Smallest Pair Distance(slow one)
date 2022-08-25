@@ -1,0 +1,22 @@
+class Solution {
+    public int smallestDistancePair(int[] nums, int k) {
+        Arrays.sort(nums);
+        int largest = nums[nums.length - 1];
+        int[] counts = new int[largest + 1];
+        int n = nums.length;
+        
+        for (int i = 0; i < n; i++) {
+            for(int j = i + 1; j < n; j++) {
+                counts[nums[j] - nums[i]]++;
+            }
+        }
+        
+        for (int i = 0; i < counts.length; i++) {
+            if (k - counts[i] <= 0) {
+                return i;
+            }
+            k -= counts[i];
+        }
+        return 0;
+    }
+}
