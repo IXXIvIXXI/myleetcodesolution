@@ -1,0 +1,26 @@
+class Solution {
+    // letter inventory approach
+    // turn number into an int array and compare this int array
+    // with the int array of the value of the power of 2
+    public boolean reorderedPowerOf2(int n) {
+        int[] countN = getCount(n);
+        
+        for (int i = 0; i < 31; i++) {
+            if (Arrays.equals(countN, getCount(1 << i))) {
+                return true;
+            }
+        }
+        
+        return false;
+    }
+    
+    private int[] getCount(int n) {
+        int[] countArr = new int[10];
+        while (n > 0) {
+            countArr[n % 10]++;
+            n /= 10;
+        }
+        
+        return countArr;
+    }
+}
