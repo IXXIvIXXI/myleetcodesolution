@@ -1,0 +1,67 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+
+// similar approach as 994.rotten oranges
+class Solution {
+    public List<Integer> distanceK(TreeNode root, TreeNode target, int k) {
+        Map<TreeNode, TreeNode> parents = new HashMap<>();
+        buildMap(parents, root, null);
+        
+        int level = 0;
+        List<Integer> res = new ArrayList<>();
+        Queue<TreeNode> q = new LinkedList<>();
+        // null as the deliminator to seperate each level
+        q.add(null);
+        q.add(target);
+        
+        
+        Set<TreeNode> seen = new HashSet<>();
+        seen.add(target);
+        seen.add(null);
+        
+        while (!q.isEmpty()) {
+            TreeNode cur = q.poll();
+            if (cur == null) {
+                if (level == k) {
+                    for (TreeNode node : q) {
+                        res.add(node.val);
+                    }
+                    return res;
+                }
+                q.offer(null);
+                level++;
+            } else {
+                if (!seen.contains(cur.left)) {
+                    seen.add(cur.left);
+                    q.offer(cur.left);
+                }
+                if (!seen.contains(cur.right)) {
+                    seen.add(cur.right);
+                    q.offer(cur.right);
+                }
+                TreeNode parent = parents.get(cur);
+                if (!seen.contains(parent)) {
+                    seen.add(parent);
+                    q.offer(parent);
+                }
+            }
+        }
+        
+        return res;
+    }
+    
+    private void buildMap(Map<TreeNode, TreeNode> parent, TreeNode curr, TreeNode prev) {
+        if (curr != null) {
+            parent.put(curr, prev);
+            buildMap(parent, curr.left, curr);
+            buildMap(parent, curr.right, curr);
+        }
+    }
+}
