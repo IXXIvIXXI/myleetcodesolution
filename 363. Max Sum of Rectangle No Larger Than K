@@ -1,0 +1,40 @@
+class Solution {
+    public int maxSumSubmatrix(int[][] matrix, int k) {
+        int rows = matrix.length;
+        int cols = matrix[0].length;
+        int max = Integer.MIN_VALUE;
+        
+        for (int i = 0; i < rows; i++) {
+            int[] cum = new int[cols];
+            
+            for (int j = i; j < rows; j++) {
+                sum(cum, matrix[j]);
+                TreeSet<Integer> ts = new TreeSet<>();
+                max = Math.max(max, helper(cum, ts, k));
+                if (max == k) return k;
+            }
+        }
+            
+        return max == Integer.MIN_VALUE ? -1 : max;
+    }
+    private int helper(int[] nums, TreeSet<Integer> ts, int k) {
+        ts.add(0);
+        int prefixSum = 0;
+        int curMax = Integer.MIN_VALUE;
+        for (int num : nums) {
+            prefixSum += num;
+            Integer ceil = ts.ceiling(prefixSum - k);
+            if (ceil != null) {
+                if (prefixSum - ceil == k) return k;
+                else curMax = Math.max(curMax, prefixSum - ceil);
+            }
+            ts.add(prefixSum);
+        }
+        return curMax;
+    }
+    private void sum(int[] cum, int[] col) {
+        for (int i = 0; i < col.length; i++) {
+            cum[i] += col[i];
+        }
+    }
+}
