@@ -1,0 +1,25 @@
+class Solution {
+    // 828.Count Unique Characters of All Substrings
+    public int sumSubarrayMins(int[] arr) {
+        long res = 0;
+        Stack<Integer> s = new Stack<>();
+        s.add(-1);
+        int n = arr.length;
+        
+        for(int i = 0; i < n; i++) {
+            while (s.size() > 1 && arr[s.peek()] > arr[i]) {
+                int curIndex = s.pop();
+                res += ((long) arr[curIndex] * (curIndex - s.peek()) * (i - curIndex)) % 1000000007;
+            }
+            
+            s.add(i);
+        }
+        
+        while (s.size() > 1) {
+            int curIndex = s.pop();
+            res += ((long) arr[curIndex] * (curIndex - s.peek()) * (n - curIndex)) % 1000000007;
+        }
+        
+        return (int) (res % 1000000007);
+    }
+}
