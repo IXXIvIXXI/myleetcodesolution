@@ -1,0 +1,43 @@
+class Solution {
+    // map each user to a list of pairs(pair contains timestamp and website name)
+    // create another map that links pattern to a set of users
+    // find all possible patterns from the list and add to the map
+    public List<String> mostVisitedPattern(String[] username, int[] timestamp, String[] website) {
+        Map<String, List<Pair<Integer, String>>> userMap = new HashMap<>();
+        
+        for (int i = 0; i < username.length; i++) {
+            userMap.putIfAbsent(username[i], new ArrayList<>());
+            userMap.get(username[i]).add(new Pair<>(timestamp[i], website[i]));
+        }
+        
+        Map<String, Set<String>> patternMap = new HashMap<>();
+        int max = 0;
+        String res = "";
+        
+        for (Map.Entry<String, List<Pair<Integer, String>>> entry : userMap.entrySet()) {
+            String user = entry.getKey();
+            List<Pair<Integer, String>> visits = entry.getValue();
+            Collections.sort(visits, (a, b) -> a.getKey() - b.getKey());
+            
+            for (int i = 0; i < visits.size() - 2; i++) {
+                for (int j = i + 1; j < visits.size() - 1; j++) {
+                    for(int k = j+ 1; k < visits.size(); k++) {
+                        String pattern = visits.get(i).getValue() + ";"
+                            + visits.get(j).getValue() + ";"
+                            + visits.get(k).getValue();
+                        Set<String> visitors = patternMap.computeIfAbsent(pattern, key -> new HashSet<>());
+                        visitors.add(user);
+                        if (visitors.size() > max) {
+                            max = visitors.size();
+                            res = pattern;
+                        }else if (visitors.size() == max) {
+                            res = res.compareTo(pattern) <= 0 ? res : pattern;
+                        }
+                    }
+                }
+            }
+        }
+        
+        return Arrays.asList(res.split(";"));
+    }
+}
