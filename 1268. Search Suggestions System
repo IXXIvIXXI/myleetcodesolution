@@ -1,0 +1,24 @@
+class Solution {
+    public List<List<String>> suggestedProducts(String[] products, String searchWord) {
+        Arrays.sort(products);
+        
+        List<List<String>> res = new ArrayList<>();
+        
+        String cur = "";
+        for (char c : searchWord.toCharArray()) {
+            cur += c;
+            List<String> queryRes = new ArrayList<>();
+            for (String s : products) {
+                if (s.startsWith(cur)) {
+                    queryRes.add(s);
+                }
+                
+                if (queryRes.size() == 3) break;
+            }
+            
+            res.add(queryRes);
+        }
+        
+        return res;
+    }
+}
