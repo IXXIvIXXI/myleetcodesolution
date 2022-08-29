@@ -1,0 +1,35 @@
+class Solution {
+    // if its even number of negative we want everything
+    //
+    // however if it's odd we only want everything after the
+    // first negative
+    //
+    // for zero, we reset all the counts
+    public int getMaxLen(int[] nums) {
+        int max = 0;
+        int numFromBeginning = 0;
+        int numAfter1stNegative = -1;
+        boolean isEven = true;
+        
+        for (int num : nums) {
+            numFromBeginning++;
+            
+            if (num > 0) {
+                if (numAfter1stNegative != -1) {
+                    numAfter1stNegative++;
+                }
+            } else if (num < 0) {
+                isEven = !isEven;
+                numAfter1stNegative++;
+            } else {
+                numFromBeginning = 0;
+                numAfter1stNegative = -1;
+                isEven = true;
+            }
+            
+            max = Math.max(max, isEven ? numFromBeginning : numAfter1stNegative);
+        }
+        
+        return max;
+    }
+}
