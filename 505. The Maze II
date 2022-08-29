@@ -1,0 +1,40 @@
+class Solution {
+    private int[][] DIRECTIONS={{0,1}, {0,-1}, {-1,0}, {1,0}};
+    public int shortestDistance(int[][] maze, int[] start, int[] destination) {
+        // create a 2d array store distance
+        // initalize it with infinity and update it when you get a smaller value
+        // return the distance stored in the destination cell
+        
+        int[][] distances = new int[maze.length][maze[0].length];
+        for (int[] distance : distances) Arrays.fill(distance, Integer.MAX_VALUE);
+        
+        distances[start[0]][start[1]] = 0;
+        dfs(maze, distances, start);
+        int res = distances[destination[0]][destination[1]];
+        return res == Integer.MAX_VALUE ? -1 : res;
+    }
+    
+    private void dfs(int[][] maze, int[][] distances, int[] start) {
+        
+        for (int[] dir : DIRECTIONS) {
+            int newCol = start[0] + dir[0];
+            int newRow = start[1] + dir[1];
+            int steps = 0;
+            while (newCol >= 0 && newRow >= 0
+                   && newCol < maze.length && newRow < maze[0].length
+                   && maze[newCol][newRow] == 0) {
+                newCol += dir[0];
+                newRow += dir[1];
+                steps++;
+                
+            }
+            
+            int endCol = newCol - dir[0];
+            int endRow = newRow - dir[1];
+            if (distances[start[0]][start[1]] + steps < distances[endCol][endRow]) {
+                distances[endCol][endRow] = distances[start[0]][start[1]] + steps;
+                dfs(maze, distances, new int[]{endCol, endRow});
+            }
+        }
+    }
+}
