@@ -1,0 +1,60 @@
+/**
+ * Definition for a binary tree node.
+ * class Node {
+ *     char val;
+ *     Node left;
+ *     Node right;
+ *     Node() {this.val = ' ';}
+ *     Node(char val) { this.val = val; }
+ *     Node(char val, Node left, Node right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    // if it's a number add to our node stack
+    // if it is ( add to operand stack
+    // if it is ) add every expression to our tree before we get to ( and remove (
+    // if it other operands compare its priority with the top operand on stack
+    //   if it has a higher priority, create a node and add to the node stack
+    // construct new nodes based on the remaining operand and add to the stack
+    public Node expTree(String s) {
+        Stack<Node> nodes = new Stack<>();
+        Stack<Character> operands = new Stack<>();
+        
+        for (char c : s.toCharArray()) {
+            if (Character.isDigit(c)) {
+                nodes.push(new Node(c));
+            } else if (c == '(') {
+                operands.push(c);
+            } else if (c == ')') {
+                while(operands.peek() != '(') {
+                    nodes.push(getNew(operands.pop(), nodes.pop(), nodes.pop()));
+                }
+                operands.pop();
+            } else {
+                while (!operands.isEmpty() && compare(operands.peek(), c)) {
+                    nodes.push(getNew(operands.pop(), nodes.pop(), nodes.pop()));
+                }
+                operands.push(c);
+            }
+        }
+        
+        while (!operands.isEmpty()) {
+            nodes.push(getNew(operands.pop(), nodes.pop(), nodes.pop()));
+        }
+        
+        return nodes.peek();
+    }
+    
+    private Node getNew(char op, Node right, Node left) {
+        return new Node(op, left, right);
+    }
+    
+    private boolean compare(char op1, char op2) {
+        if (op1 == '(' || op1 == ')') return false;
+        return op1 == '/' || op1 == '*' || op2 == '+' || op2 == '-';
+    }
+}
