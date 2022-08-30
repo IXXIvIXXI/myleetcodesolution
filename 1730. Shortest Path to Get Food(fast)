@@ -1,0 +1,42 @@
+class Solution {
+    int[][] DIRS = { {-1, 0}, {0, 1}, {1, 0}, {0, -1}};
+    public int getFood(char[][] grid) {
+        int steps = 0, m = grid.length, n = grid[0].length;
+        boolean[][] seen = new boolean[m][n];
+        Queue<int[]> q = new LinkedList<>();
+        
+        for (int i = 0; i < grid.length; i++) {
+            for (int j = 0; j < grid[0].length; j++) {
+                if (grid[i][j] == '*') q.add(new int[]{i, j});
+            }
+        }
+        
+        while (!q.isEmpty()) {
+            int size = q.size();
+            
+            while (size-- > 0) {
+                int[] pos = q.poll();
+                int row = pos[0];
+                int col = pos[1];
+                
+                if (grid[row][col] == '#') return steps;
+                
+                for (int[] dir : DIRS) {
+                    int newRow = row + dir[0];
+                    int newCol = col + dir[1];
+                    
+                    if (newRow >= 0 && newRow < grid.length
+                        && newCol >= 0 && newCol < grid[0].length
+                        && !seen[newRow][newCol] && grid[newRow][newCol] != 'X') {
+                        seen[newRow][newCol] = true;
+                        q.offer(new int[]{newRow, newCol});
+                    }
+                }
+            }
+            
+            steps++;
+        }
+        
+        return -1;
+    }
+}
