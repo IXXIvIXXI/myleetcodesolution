@@ -1,0 +1,28 @@
+class Solution {
+    public int totalStrength(int[] strength) {
+        int res = 0;
+        int ac = 0;
+        int mod = (int)1e9 + 7;
+        int n = strength.length;
+        Stack<Integer> stack = new Stack<>();
+        int[] acc = new int[n + 2];
+        
+        for (int i = 0; i <= n; i++) {
+            int nxt = i < n ? strength[i] : 0;
+            ac = (ac + nxt) % mod;
+            acc[i + 1] = (ac + acc[i]) % mod;
+            while (!stack.isEmpty() && strength[stack.peek()] > nxt) {
+                int cur = stack.pop();
+                int prev = stack.isEmpty() ? -1 : stack.peek();
+                long prevAcc = prev < 0 ? acc[cur] : acc[cur] - acc[prev];
+                long nxtAcc = acc[i] - acc[cur];
+                int leftRange = cur - prev;
+                int rightRange = i - cur;
+                res = (int)(res +(leftRange * nxtAcc - rightRange * prevAcc)% mod* strength[cur] % mod)% mod;
+            }
+            stack.push(i);
+        }
+        
+        return (res + mod) % mod;
+    }
+}
