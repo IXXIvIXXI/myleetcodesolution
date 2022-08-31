@@ -1,0 +1,40 @@
+class Solution {
+    public int largestVariance(String s) {
+        int max = 0;
+        
+        for (int i = 0; i <= 26; i++) {
+            for (int j = 0; j <= 26; j++) {
+                if (i != j) {
+                    max = Math.max(findMax(s, i, j), max);
+                }
+            }
+        }
+        
+        return max;
+    }
+    
+    private int findMax(String s, int i, int j) {
+        int res = 0;
+        int countA = 0;
+        int countB = 0;
+        boolean oneB = false;
+        
+        for (char c : s.toCharArray()) {
+            if (c - 'a' == i) countA++;
+            if (c - 'a' == j) countB++;
+            
+            if(countB > 0) {
+                res = Math.max(res, countA - countB);
+            } else if (oneB) {
+                res = Math.max(res, countA - 1);
+            }
+            
+            if (countB > countA) {
+                countB = 0;
+                countA = 0;
+                oneB = true;
+            }
+        }
+        return res;
+    }
+}
