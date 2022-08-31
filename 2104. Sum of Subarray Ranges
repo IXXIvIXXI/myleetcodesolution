@@ -1,0 +1,39 @@
+class Solution {
+    // 9 2 [10 8 5 7] 4 1
+    // 5 as minimal are 2 * 3 = 6 subarrays in total
+    // sum -= 6 * 5
+    // 9 2 10 [8 5 7 4 1]
+    // 8 as maximal are 1 * 5 total subarrays
+    // sum += 8 * 5
+    
+    // decreasing stack => finds previous greater and next greater elements
+    // increasing stack => finds previous lesser and next lesser elements
+    public long subArrayRanges(int[] nums) {
+        // to find a minimal
+          // 1. choose a pivot
+          // 2. find the previous lesser position
+          // 3. find the next lesser position
+          // (cur - prev) * (next - cur) * val
+        long sum = 0;
+        Stack<Integer> incre = new Stack<Integer>();
+        Stack<Integer> decre = new Stack<Integer>();
+        for (int i = 0; i <= nums.length; i++) {
+            // bifunction
+            sum += getMaxOrMin(decre, nums, i, (a, b) -> a < b)
+                   -  getMaxOrMin(incre, nums, i, (a, b) -> a > b);
+        }
+        
+        return sum;
+    }
+    
+    private long getMaxOrMin(Stack<Integer> st, int[] nums, int i, BiFunction<Integer, Integer, Boolean> compare) {
+        long res = 0;
+        while(!st.isEmpty() && (i == nums.length || (compare.apply(nums[st.peek()], nums[i])))) {
+            int cur = st.pop();
+            int prev = st.isEmpty() ? -1 : st.peek();
+            res += (cur - prev) * (i - cur) * (long) nums[cur];
+        }
+        st.push(i);
+        return res;
+    }
+}
