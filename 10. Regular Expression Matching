@@ -1,0 +1,24 @@
+class Solution {
+    public boolean isMatch(String s, String p) {
+        
+        return dfs(0, 0, s, p);
+    }
+    
+    private boolean dfs(int sI, int pI, String s, String p) {
+        if (sI >= s.length() && pI >= p.length()) return true;
+        if (pI >= p.length()) return false;
+        
+        // match checks if two strings up to sI and pI are matching or not
+        boolean match = (sI < s.length() && (s.charAt(sI) == p.charAt(pI) || p.charAt(pI) == '.'));
+        
+        // if the next character is * even though current strings don't match we can remove the unmatched
+        // character based on * or we can use * to match future characters
+        if (pI + 1 < p.length() && p.charAt(pI + 1) == '*') {
+            return dfs(sI, pI + 2, s, p) || (match && dfs(sI + 1, pI, s, p));
+        }
+        
+        // if no * we keep search if two substrings match
+        if (match) return dfs(sI + 1, pI + 1, s, p);
+        return false;
+    }
+}
