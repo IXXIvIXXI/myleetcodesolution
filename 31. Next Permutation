@@ -1,0 +1,42 @@
+class Solution {
+    public void nextPermutation(int[] nums) {
+        // find the spot before the longest non-increasing suffix
+        // find the rightmost successor of pivot and swap
+        // reverse the suffix
+        int pivot = findPivot(nums);
+        
+        if (pivot != -1) {
+            int swapPos = findSwap(pivot, nums);
+            swap(pivot, swapPos, nums);
+        }
+        
+        reverseSuffix(nums, pivot + 1);
+    }
+
+    private void swap(int pivot, int swapPos, int[] nums) {
+        int tmp = nums[pivot];
+        nums[pivot] = nums[swapPos];
+        nums[swapPos] = tmp;
+    }
+    
+    private void reverseSuffix(int[] nums, int start) {
+        int end = nums.length - 1;
+        while (start < end) {
+            swap(start++, end--, nums);
+        }
+    }
+
+    private int findSwap(int pivot, int[] nums) {
+        for (int i = nums.length - 1; i > pivot; i--) {
+            if (nums[i] > nums[pivot]) return i;
+        }
+        return -1;
+    }
+    
+    private int findPivot(int[] nums) {
+        for (int i = nums.length - 1; i > 0; i--) {
+            if (nums[ i - 1] < nums[i]) return i - 1;
+        }
+        return -1;
+    }
+}
