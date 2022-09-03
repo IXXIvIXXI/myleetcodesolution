@@ -1,0 +1,23 @@
+class Solution {
+    public int[] numsSameConsecDiff(int N, int K) {
+        List<Integer> res = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9);
+        
+        for (int i = 2; i <= N; i++) {
+            List<Integer> curList = new ArrayList<>();
+            for (int num : res) {
+                int lastDigit = num % 10;
+                if (lastDigit + K < 10) {
+                    curList.add(num * 10 + lastDigit + K);
+                }
+                // edge case N = 2, K = 0, same value would be added twice
+                if (K > 0 && lastDigit - K >= 0) {
+                    curList.add(num * 10 + lastDigit - K);
+                }
+            }
+            res = curList;
+        }
+        
+        // mapToInt returns an IntStream
+        return res.stream().mapToInt(j->j).toArray();
+    }
+}
